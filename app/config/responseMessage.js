@@ -1,0 +1,3 @@
+exports.COMMON = {
+  SUCCESS: 'Success',
+};
