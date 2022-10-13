@@ -1,0 +1,2 @@
+exports.bootstrapService = require('./bootstrapService');
+

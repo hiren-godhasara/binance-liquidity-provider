@@ -39,7 +39,8 @@
     "rewire": "^6.0.0",
     "sinon-chai": "^3.7.0",
     "uuid": "^8.3.2",
-    "websocket": "^1.0.34"
+    "websocket": "^1.0.34",
+    "ws": "^8.9.0"
   },
   "devDependencies": {
     "chai": "^4.3.6",

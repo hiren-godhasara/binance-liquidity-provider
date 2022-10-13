@@ -28,8 +28,6 @@ exports.cors = {
   origin: '*',
 };
 
-
-
 exports.response = {
   messages: require('./responseMessage'),
 };
