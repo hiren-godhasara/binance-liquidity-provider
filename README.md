@@ -1,1 +1,1 @@
-# binance-liquidity-provider
+# Binance Liquidity Provider

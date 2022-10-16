@@ -1,18 +1,19 @@
-const body={
+const body = {
     type: 'object',
     properties: {
         symbol: { type: 'string' },
-        askDifference:{ type: 'number',minimum:0},
-        bidDifference:{ type: 'number',minimum:0},
-        amount:{type:'number',minimum:0}
+        askDifference: { type: 'number' },
+        bidDifference: { type: 'number'  },
+        askAmount: { type: 'number' },
+        bidAmount: { type: 'number'}
     },
-    required: [],
+    required: ['symbol','askDifference','bidDifference','askAmount','bidAmount'],
     additionalProperties: false,
 }
 
 
 exports.postSchema = {
     description: 'This is an endpoint for to start Providing Liquidity.',
-    tags: ['liquidty Provider'],
-    body:body,
+    tags: ['Liquidty Provider'],
+    body: body,
 };

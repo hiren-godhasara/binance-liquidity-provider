@@ -8,3 +8,13 @@ exports.routesRegister = async (fastify, routes = []) => {
     fastify.route(ro);
   });
 };
+
+
+
+exports.sendResponse = (res, statusCode, message, data = {}, error = {}) => {
+  return res.code(statusCode).send({
+    message,
+    data,
+    error,
+  });
+};

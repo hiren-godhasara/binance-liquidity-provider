@@ -1,19 +1,20 @@
 const mongoose = require('mongoose');
+const LiqudityProvider = require('./LiqudityProvider');
 
 
 async function dbConnection(db_url) {
-  await mongoose
-    .connect(db_url, { useNewUrlParser: true, useUnifiedTopology: true })
+  await mongoose.connect(db_url, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(async () => {
-      console.log('Database connected successfully')
+      console.log('Database connection established');
     })
     .catch((err) => {
-      console.error('Database Connection error', err);
+      console.error('Database connection error', err);
       process.exit();
     });
 }
 
 
 module.exports = {
-    dbConnection,
+  dbConnection,
+  LiqudityProvider
 };

@@ -1,14 +1,12 @@
 const axios = require('axios');
-const { DATA_NOT_FOUND } = require('../config/responseMessage');
-
+const { URL } = require('../config');
 global.pairs = {};
 
 exports.getBinanceExchangeInfo = async () => {
     try {
-        let resp = await axios.get('https://api3.binance.com/api/v3/exchangeInfo')
+        let resp = await axios.get(`${URL.BINANCE_BASE_URL}/v3/exchangeInfo`);
         let symbols = resp.data.symbols;
         if (!symbols || !symbols.length) {
-            console.log(DATA_NOT_FOUND.message);
             return;
         }
         for (let i = 0; i < symbols.length; i++) {
@@ -24,7 +22,7 @@ exports.getBinanceExchangeInfo = async () => {
                         objSymbol.MIP = Number(filter.minPrice);
                         objSymbol.MXP = Number(filter.maxPrice);
                         var tickSize = (filter.tickSize).indexOf('1') - 1;
-                        objSymbol.TS = tickSize == -1 ? 0 : tickSize
+                        objSymbol.TS = tickSize == -1 ? 0 : tickSize;
                         objSymbol.TSF = (tickSize == -1 ? "1.0-0" : "1." + tickSize + "-" + tickSize);
                         break;
                     case "PERCENT_PRICE":
@@ -36,7 +34,7 @@ exports.getBinanceExchangeInfo = async () => {
                         objSymbol.MIQ = Number(filter.minQty);
                         objSymbol.MXQ = Number(filter.maxQty);
                         var stepSize = (filter.stepSize).indexOf('1') - 1;
-                        objSymbol.SS = stepSize == -1 ? 0 : stepSize
+                        objSymbol.SS = stepSize == -1 ? 0 : stepSize;
                         objSymbol.SSF = (stepSize == -1 ? "1.0-0" : "1." + stepSize + "-" + stepSize);
                         break;
                     case "MIN_NOTIONAL":
@@ -48,16 +46,34 @@ exports.getBinanceExchangeInfo = async () => {
                 }
             }
             if (objSymbol.STS === 'TRADING') {
-                pairs[`${singleSymbol.symbol}`] = objSymbol
+                pairs[`${singleSymbol.symbol}`] = objSymbol;
             }
-            setTimeout(() => {
-                module.exports.getBinanceExchangeInfo();
-            }, 3600000);
         }
+        await this.getPair24hourChange()
+        setTimeout(() => {
+            module.exports.getBinanceExchangeInfo();
+        }, 3600000); //1hour
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 
+}
+
+exports.getPair24hourChange = async () => {
+    try {
+        let res = await axios.get(`${URL.BINANCE_BASE_URL}/v3/ticker/24hr`);
+        let data = res.data;
+        if (!data || !data.length) {
+            return;
+        }
+        for (let i = 0; i < data.length; i++) {
+            if (pairs[data[i].symbol] != undefined) {
+                pairs[data[i].symbol].c = Number(data[i].lastPrice);
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 
