@@ -21,4 +21,25 @@ APISECRET='XXXXXXXXXXX-YOUR-SECERET-XXXXXXXXXXXXXXXX'
 ```html
     node index.js
 ```
+## To start provide liquidity 
+to start provide liquidity we want to call below api with required body parameters.  
+#### Method 
+```html
+     POST 
+```
+#### Endpoint url 
+```html
+    /api/v1/liquidity-provide
+```
+#### Body 
+##### Body must me object with below mandatory parameters.
+###### *if not sending mandetory parameters system consider default value. 
+##### Parameters
 
+| Name | Type | Mandatory | Description |  Default |
+| ------ | ------ |------|-----|-----|
+| symbol | String | YES | You can set any symbol pair which is binance listed | BTCUSDT
+| askDifference | Number | YES  |  Ask order diffrence from live price| 10 
+| bidDifference | Number | YES |  Bid order diffrence from live price| 10 
+| askAmount | Number | YES |  Ask order Amount | 0.001
+| bidAmount | Number | YES |  Bid  order Amount | 0.001
