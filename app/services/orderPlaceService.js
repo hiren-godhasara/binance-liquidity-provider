@@ -1,8 +1,8 @@
 const axios = require('axios');
 const crypto = require('crypto');
-const { URL } = require('../config');
-const APIKEY = process.env.APIKEY;
-const APISECRET = process.env.APISECRET;
+const { URL,server } = require('../config');
+const APIKEY = server.APIKEY;
+const APISECRET = server.APISECRET;
 
 exports.placeOrder = async ({ symbol, side, type, quantity, price, }) => {
     try {

@@ -1,11 +1,11 @@
 const body = {
     type: 'object',
     properties: {
-        symbol: { type: 'string' },
-        askDifference: { type: 'number' },
-        bidDifference: { type: 'number'  },
-        askAmount: { type: 'number' },
-        bidAmount: { type: 'number'}
+        symbol: { type: 'string',default: "BTCUSDT",},
+        askDifference: { type: 'number',default: 10 },
+        bidDifference: { type: 'number',default: 10  },
+        askAmount: { type: 'number',default: 0.001 },
+        bidAmount: { type: 'number',default: 0.001}
     },
     required: ['symbol','askDifference','bidDifference','askAmount','bidAmount'],
     additionalProperties: false,

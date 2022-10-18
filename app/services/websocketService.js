@@ -2,6 +2,7 @@ const WebSocket = require('ws');
 const { checkOrderPrice } = require('./matchingService');
 
 exports.connectWs = async () => {
+  console.log("\x1b[32m",'\nConnecting... Binance market websocket');
   const ws = new WebSocket('wss://stream.binance.com:9443/stream');
   ws.on('open', function open() {
     ws.send(JSON.stringify({ method: 'SUBSCRIBE', params: ['!miniTicker@arr@1000ms'], id: 1 }));
@@ -27,6 +28,7 @@ exports.connectWs = async () => {
   ws.on('ping', (e) => {
     ws.pong();
   });
+  console.log("\x1b[32m",'\nBinance market websocket connected successfully.');
 }
 
 exports.tryToConnectWsAfterDisconnecting = () => {

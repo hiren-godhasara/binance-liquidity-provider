@@ -4,6 +4,7 @@ global.pairs = {};
 
 exports.getBinanceExchangeInfo = async () => {
     try {
+        console.log("\x1b[32m",'\nGetting symbols information from  BinanceExchangeInfo API');
         let resp = await axios.get(`${URL.BINANCE_BASE_URL}/v3/exchangeInfo`);
         let symbols = resp.data.symbols;
         if (!symbols || !symbols.length) {

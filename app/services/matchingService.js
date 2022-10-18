@@ -11,7 +11,7 @@ exports.checkOrderPrice = async (tickers) => {
         }
         for (let j = 0; j < allOrderData[ticker.s].length; j++) {
             const order = allOrderData[ticker.s][j];
-            process.stdout.write(" lastPrice : " + ticker.c + " \r");
+            process.stdout.write("ask: "+order.askPrice+" lastPrice: " + Number(ticker.c) + " bid: " +order.bidPrice+" \r");
             if (order.askPrice <= Number(ticker.c) || order.bidPrice >= Number(ticker.c)) {
                 this.orderMatched(order);
                 await allOrderData[ticker.s].splice(j, 1);
@@ -23,42 +23,43 @@ exports.checkOrderPrice = async (tickers) => {
 
 exports.orderMatched = async (order) => {
     try {
-        const orderData = await LiqudityProvider.findById(order._id);
-        if (!orderData || !orderData.status) {
-            return;
-        }
-        await cancleOrder(orderData.symbol, orderData.askOrderId);
-        await cancleOrder(orderData.symbol, orderData.bidOrderId);
-        const { symbol, askAmount, bidAmount, askDifference, bidDifference } = orderData;
+        await cancleOrder(order.symbol, order.askOrderId);
+        await cancleOrder(order.symbol, order.bidOrderId);
+        const { symbol, askAmount, bidAmount, askDifference, bidDifference } = order;
         const symbolData = global.pairs[symbol];
         if (!symbolData) {
-            return await LiqudityProvider.updateOne({ _id: orderData._id }, { err: 'Pair not available.' });
+            console.log('Pair not available.');
+            return
         }
         if (symbolData.MIQ > askAmount || symbolData.MAQ < askAmount) {
-            return await LiqudityProvider.updateOne({ _id: orderData._id }, { err: 'Order ask amount is invalid.' });
+            console.log('Order ask amount is invalid.');
+            return
         }
         if (symbolData.MIQ > bidAmount || symbolData.MAQ < bidAmount) {
-            return await LiqudityProvider.updateOne({ _id: orderData._id }, { err: 'Order bid amount is invalid.' });
+            console.log('Order bid amount is invalid.');
+            return
         }
         const validMinPrice = Math.max(symbolData.MIP, symbolData.c * symbolData.MD);
         const validMaxPrice = Math.min(symbolData.MXP, symbolData.c * symbolData.MU);
         const askPrice = symbolData.c + askDifference;
         if (validMinPrice > askPrice || validMaxPrice < askPrice) {
-            return await LiqudityProvider.updateOne({ _id: orderData._id }, { err: `Order ask difference is invalid at price ${symbolData.c}.` });
+            console.log(`Order ask difference is invalid at price ${symbolData.c}.`);
+            return
         }
         const bidPrice = symbolData.c - bidDifference;
         if (validMinPrice > bidPrice || validMaxPrice < bidPrice) {
-            return await LiqudityProvider.updateOne({ _id: orderData._id }, { err: `Order bid difference is invalid at price ${symbolData.c}.` });
+            console.log(`Order bid difference is invalid at price ${symbolData.c}.`);
+            return
         }
         if ((askAmount * askPrice < symbolData.MIN) || (bidAmount * bidPrice < symbolData.MIN)) {
-            return await LiqudityProvider.updateOne({ _id: orderData._id }, { err: `minNotional filter failed at price ${symbolData.c}.` });
+            console.log(`minNotional filter failed at price ${symbolData.c}.`);
+            return
         }
         const askOrderData = await placeOrder({ symbol, side: 'SELL', type: 'LIMIT', quantity: askAmount, price: askPrice });
         const bidOrderData = await placeOrder({ symbol, side: 'BUY', type: 'LIMIT', quantity: bidAmount, price: bidPrice });
-        const updatedData = await LiqudityProvider.findByIdAndUpdate(orderData._id, { askPrice, bidPrice, askOrderId: askOrderData.orderId, bidOrderId: bidOrderData.orderId, startPrice: symbolData.c }, { new: true });
+        const updatedData = {symbol, askAmount, bidAmount, askDifference, bidDifference, askPrice, bidPrice,askOrderId: askOrderData.orderId, bidOrderId: bidOrderData.orderId, startPrice: symbolData.c}
         this.sendForMatching(updatedData);
     } catch (error) {
-        await LiqudityProvider.updateOne({ _id: order._id }, { status: false, err: error.message });
         console.log(error);
     }
 }

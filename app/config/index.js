@@ -1,8 +1,9 @@
 require('dotenv').config();
 
 exports.server = {
-  port: process.env.PORT,
-  db_url: process.env.DATABASE_URL
+  port: 8000,
+  APIKEY:process.env.APIKEY,
+  APISECRET:process.env.APISECRET
 };
 
 exports.swagger = {
@@ -25,8 +26,8 @@ exports.swagger = {
 };
 
 exports.URL = {
-  TEST_BASE_URL: process.env.TEST_BASE_URL,
-  BINANCE_BASE_URL: process.env.BINANCE_BASE_URL
+  TEST_BASE_URL: 'https://testnet.binance.vision/api',
+  BINANCE_BASE_URL: 'https://api3.binance.com/api'
 }
 
 exports.cors = {

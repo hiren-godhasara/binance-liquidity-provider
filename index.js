@@ -1,7 +1,6 @@
 const Fastify = require('fastify');
 const routes = require('./app/routes');
 const config = require('./app/config');
-const { dbConnection } = require('./app/models');
 const { bootstrapProcess } = require('./app/services/bootstrapService');
 
 const fastify = Fastify({
@@ -15,10 +14,8 @@ async function start() {
         await fastify.register(require('@fastify/swagger'), config.swagger);
         await fastify.register(routes);
         fastify.swagger();
-        await fastify.listen({ port: config.server.port || 3000 });
-        await dbConnection(config.server.db_url)
-        await bootstrapProcess()
-        console.log(fastify.printRoutes());
+        await fastify.listen({ port: config.server.port});
+        await bootstrapProcess();
     } catch (err) {
         fastify.log.error(err);
         process.exit(1);
