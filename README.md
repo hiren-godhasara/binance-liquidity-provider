@@ -8,7 +8,7 @@
 ```
 ### 2. Install the dependencies and devDependencies
 ```html
-    npm i
+    npm install
 ```
 ### 3. Go to the  .ENV file and set Binance testnet user APIKEY and SECERET 
 ##### Path :  binance-liquidity-provider/.env
