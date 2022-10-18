@@ -33,13 +33,35 @@ to start provide liquidity we want to call below api with required body paramete
 ```
 #### Body 
 ##### Body must be object with below mandatory parameters.
-###### *if not sending mandetory parameters system consider default value. 
+###### *if  mandetory parameter are not being send then system will consider default value. 
 ##### Parameters
 
 | Name | Type | Mandatory | Description |  Default |
 | ------ | ------ |------|-----|-----|
-| symbol | String | YES | You can set any symbol pair which is binance listed | BTCUSDT
+| symbol | String | YES | You can set any symbol pair which Binance listed | BTCUSDT
 | askDifference | Number | YES  |  Ask order diffrence from live price| 10 
 | bidDifference | Number | YES |  Bid order diffrence from live price| 10 
 | askAmount | Number | YES |  Ask order Amount | 0.001
 | bidAmount | Number | YES |  Bid  order Amount | 0.001
+
+### Example
+If we want to provide liquidity for BTCUSDT pair with the price diffrence of 100 USDT from letest price and the amount of order is  0.001 BTC.
+##### Send parameters in body like below 
+```html
+{
+  "symbol": "BTCUSDT",
+  "askDifference": 10,
+  "bidDifference": 10,
+  "askAmount": 0.001,
+  "bidAmount": 0.001
+}
+```
+### You can also Run this API using swagger UI
+##### UI Endpoint url 
+```html
+    /doc
+```
+example
+http://localhost:8000/doc
+
+## Thank You 
