@@ -32,7 +32,7 @@ to start provide liquidity we want to call below api with required body paramete
     /api/v1/liquidity-provide
 ```
 #### Body 
-##### Body must me object with below mandatory parameters.
+##### Body must be object with below mandatory parameters.
 ###### *if not sending mandetory parameters system consider default value. 
 ##### Parameters
 
